@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: #1A1A1B;
+    color: #D7DADC;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@layer components {
+  .media-card {
+    @apply bg-card-bg rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-[1.02];
+  }
+  
+  .media-grid {
+    @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4;
+  }
+  
+  .search-bar {
+    @apply w-full max-w-md mx-auto bg-card-bg border border-gray-600 rounded-full px-4 py-3 text-text-primary placeholder-text-secondary focus:outline-none focus:ring-2 focus:ring-reddit-orange focus:border-transparent;
+  }
+  
+  .btn-primary {
+    @apply bg-reddit-orange hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-full transition-colors duration-200;
+  }
+  
+  .btn-secondary {
+    @apply bg-card-bg hover:bg-gray-700 text-text-primary font-semibold py-2 px-4 rounded-full border border-gray-600 transition-colors duration-200;
+  }
+  
+  .loading-spinner {
+    @apply animate-spin rounded-full h-8 w-8 border-b-2 border-reddit-orange;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+} 

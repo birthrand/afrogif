@@ -1,0 +1,31 @@
+{
+  "name": "ai-afrogif",
+  "version": "1.0.0",
+  "description": "Mobile-first Reddit media content scraper",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "build": "npm run build:css",
+    "build:css": "tailwindcss -i ./src/input.css -o ./public/styles.css --watch"
+  },
+  "keywords": ["reddit", "scraper", "media", "mobile-first"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "axios": "^1.6.0",
+    "cheerio": "^1.0.0-rc.12",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "helmet": "^7.1.0",
+    "compression": "^1.7.4",
+    "rate-limiter-flexible": "^2.4.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "tailwindcss": "^3.3.5",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31"
+  }
+} 
