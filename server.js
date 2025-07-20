@@ -199,7 +199,33 @@ app.get('/api/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     timestamp: new Date().toISOString(),
-    message: 'AfroGIF server is running!'
+    message: 'AfroGIF server is running!',
+    environment: process.env.NODE_ENV || 'development',
+    port: PORT
+  });
+});
+
+app.get('/api/test', (req, res) => {
+  res.json({ 
+    success: true, 
+    data: [
+      {
+        id: 'test1',
+        title: 'Test Content - Server is Working!',
+        author: 'system',
+        subreddit: 'test',
+        url: 'https://via.placeholder.com/400x300/00ff00/ffffff?text=Server+Working',
+        thumbnail: 'https://via.placeholder.com/150x150/00ff00/ffffff?text=✅',
+        mediaType: 'image',
+        score: 100,
+        numComments: 0,
+        created: Date.now() / 1000,
+        permalink: 'https://example.com',
+        isNSFW: false,
+        domain: 'test.com'
+      }
+    ],
+    message: 'Test endpoint working correctly'
   });
 });
 
@@ -347,4 +373,15 @@ app.use((req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📱 Mobile-first Reddit media scraper ready!`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🔧 Port: ${PORT}`);
+});
+
+// Handle server errors
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
 }); 

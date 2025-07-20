@@ -222,31 +222,52 @@ class AfroGIF {
     }
 
     async loadSubredditContent() {
-        const response = await fetch(`/api/subreddit/${this.currentSubreddit}?sort=${this.currentSort}&limit=${this.currentLimit}`);
-        const result = await response.json();
-        
-        if (!result.success) {
-            throw new Error(result.error);
-        }
+        try {
+            console.log(`Loading subreddit: ${this.currentSubreddit}`);
+            const response = await fetch(`/api/subreddit/${this.currentSubreddit}?sort=${this.currentSort}&limit=${this.currentLimit}`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const text = await response.text();
+            console.log('Raw response:', text);
+            
+            let result;
+            try {
+                result = JSON.parse(text);
+            } catch (parseError) {
+                console.error('JSON parse error:', parseError);
+                console.error('Response text:', text);
+                throw new Error('Invalid JSON response from server');
+            }
+            
+            if (!result.success) {
+                throw new Error(result.error);
+            }
 
-        // For new subreddit loads, always replace posts
-        // For infinite scroll, append new posts
-        if (this.posts.length === 0 || this.currentLimit <= 25) {
-            this.posts = result.data;
-        } else {
-            // Append only new posts (avoid duplicates) - for infinite scroll
-            const newPosts = result.data.filter(newPost => 
-                !this.posts.some(existingPost => existingPost.id === newPost.id)
-            );
-            this.posts = [...this.posts, ...newPosts];
+            // For new subreddit loads, always replace posts
+            // For infinite scroll, append new posts
+            if (this.posts.length === 0 || this.currentLimit <= 25) {
+                this.posts = result.data;
+            } else {
+                // Append only new posts (avoid duplicates) - for infinite scroll
+                const newPosts = result.data.filter(newPost => 
+                    !this.posts.some(existingPost => existingPost.id === newPost.id)
+                );
+                this.posts = [...this.posts, ...newPosts];
+            }
+            
+            // Show fallback message if using fallback content
+            if (result.fallback) {
+                this.showToast('Reddit is temporarily unavailable. Showing fallback content.', 'warning');
+            }
+            
+            this.renderContent();
+        } catch (error) {
+            console.error('Error in loadSubredditContent:', error);
+            throw error;
         }
-        
-        // Show fallback message if using fallback content
-        if (result.fallback) {
-            this.showToast('Reddit is temporarily unavailable. Showing fallback content.', 'warning');
-        }
-        
-        this.renderContent();
     }
 
     async searchContent() {
