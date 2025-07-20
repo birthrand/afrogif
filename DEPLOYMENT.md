@@ -40,7 +40,7 @@
    - **Environment**: `Node`
    - **Region**: Choose closest to you
    - **Branch**: `main`
-   - **Build Command**: `npm install && npm run build`
+   - **Build Command**: `npm install`
    - **Start Command**: `npm start`
    - **Plan**: `Free`
 
