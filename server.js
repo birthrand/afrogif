@@ -45,6 +45,7 @@ const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
 // Reddit API functions
 async function scrapeRedditMedia(subreddit, sort = 'hot', limit = 25) {
   try {
+    console.log(`Scraping Reddit: r/${subreddit} (${sort})`);
     const url = `https://www.reddit.com/r/${subreddit}/${sort}.json?limit=${limit}`;
     
     const response = await axios.get(url, {
@@ -53,7 +54,7 @@ async function scrapeRedditMedia(subreddit, sort = 'hot', limit = 25) {
         'Accept': 'application/json',
         'Cache-Control': 'no-cache'
       },
-      timeout: 15000
+      timeout: 10000 // Reduced timeout for faster fallback
     });
 
     const posts = response.data.data.children
@@ -252,13 +253,13 @@ app.get('/api/subreddit/:subreddit', async (req, res) => {
     const fallbackPosts = [
       {
         id: 'fallback1',
-        title: 'Reddit is temporarily unavailable',
+        title: '🎬 Welcome to AfroGIF!',
         author: 'system',
         subreddit: subreddit,
-        url: 'https://via.placeholder.com/400x300/ff6b35/ffffff?text=Reddit+Unavailable',
-        thumbnail: 'https://via.placeholder.com/150x150/ff6b35/ffffff?text=!',
+        url: 'https://via.placeholder.com/400x300/ff6b35/ffffff?text=Welcome+to+AfroGIF',
+        thumbnail: 'https://via.placeholder.com/150x150/ff6b35/ffffff?text=🎬',
         mediaType: 'image',
-        score: 0,
+        score: 100,
         numComments: 0,
         created: Date.now() / 1000,
         permalink: `https://reddit.com/r/${subreddit}`,
@@ -267,13 +268,28 @@ app.get('/api/subreddit/:subreddit', async (req, res) => {
       },
       {
         id: 'fallback2',
-        title: 'Please try again in a few minutes',
+        title: 'Reddit is temporarily unavailable',
         author: 'system',
         subreddit: subreddit,
-        url: 'https://via.placeholder.com/400x300/4a90e2/ffffff?text=Try+Again+Later',
+        url: 'https://via.placeholder.com/400x300/4a90e2/ffffff?text=Reddit+Unavailable',
         thumbnail: 'https://via.placeholder.com/150x150/4a90e2/ffffff?text=⏰',
         mediaType: 'image',
-        score: 0,
+        score: 50,
+        numComments: 0,
+        created: Date.now() / 1000,
+        permalink: `https://reddit.com/r/${subreddit}`,
+        isNSFW: false,
+        domain: 'placeholder.com'
+      },
+      {
+        id: 'fallback3',
+        title: 'Try searching or browse categories',
+        author: 'system',
+        subreddit: subreddit,
+        url: 'https://via.placeholder.com/400x300/00ff00/ffffff?text=Try+Searching',
+        thumbnail: 'https://via.placeholder.com/150x150/00ff00/ffffff?text=🔍',
+        mediaType: 'image',
+        score: 25,
         numComments: 0,
         created: Date.now() / 1000,
         permalink: `https://reddit.com/r/${subreddit}`,

@@ -258,10 +258,10 @@ class AfroGIF {
                 this.posts = [...this.posts, ...newPosts];
             }
             
-            // Show fallback message if using fallback content
-            if (result.fallback) {
-                this.showToast('Reddit is temporarily unavailable. Showing fallback content.', 'warning');
-            }
+                    // Show fallback message if using fallback content
+        if (result.fallback) {
+            this.showToast('🎬 Welcome to AfroGIF! Reddit content will load when available.', 'info');
+        }
             
             this.renderContent();
         } catch (error) {
@@ -306,7 +306,7 @@ class AfroGIF {
         
         // Show fallback message if using fallback content
         if (result.fallback) {
-            this.showToast('Search failed. Reddit is temporarily unavailable.', 'warning');
+            this.showToast('🔍 Search will work when Reddit is available. Try browsing categories!', 'info');
         }
         
         console.log('Posts after search:', this.posts.length);
