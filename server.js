@@ -37,7 +37,18 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-app.use(express.static('public'));
+// Serve static files with proper MIME types
+app.use(express.static('public', {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    } else if (path.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    } else if (path.endsWith('.html')) {
+      res.setHeader('Content-Type', 'text/html');
+    }
+  }
+}));
 
 // User agent to avoid being blocked
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
@@ -373,6 +384,12 @@ app.get('/api/proxy/video', async (req, res) => {
 // Serve the main HTML file
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// Ensure CSS is served with correct MIME type
+app.get('/styles.css', (req, res) => {
+  res.setHeader('Content-Type', 'text/css');
+  res.sendFile(path.join(__dirname, 'public', 'styles.css'));
 });
 
 // Error handling middleware
