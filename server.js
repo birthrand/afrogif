@@ -376,24 +376,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Serve CSS with explicit error handling
-app.get('/styles.css', (req, res) => {
-  const cssPath = path.join(__dirname, 'public', 'styles.css');
-  
-  // Check if file exists
-  if (!require('fs').existsSync(cssPath)) {
-    console.error('CSS file not found:', cssPath);
-    return res.status(404).json({ error: 'CSS file not found' });
-  }
-  
-  res.setHeader('Content-Type', 'text/css');
-  res.sendFile(cssPath, (err) => {
-    if (err) {
-      console.error('Error serving CSS:', err);
-      res.status(500).json({ error: 'Failed to serve CSS file' });
-    }
-  });
-});
+
 
 // Error handling middleware
 app.use((err, req, res, next) => {
