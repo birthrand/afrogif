@@ -37,18 +37,8 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-// Serve static files with proper MIME types
-app.use(express.static('public', {
-  setHeaders: (res, path) => {
-    if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    } else if (path.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    } else if (path.endsWith('.html')) {
-      res.setHeader('Content-Type', 'text/html');
-    }
-  }
-}));
+// Serve static files
+app.use(express.static('public'));
 
 // User agent to avoid being blocked
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36';
@@ -386,12 +376,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Ensure CSS is served with correct MIME type
-app.get('/styles.css', (req, res) => {
-  res.setHeader('Content-Type', 'text/css');
-  res.sendFile(path.join(__dirname, 'public', 'styles.css'));
-});
-
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -403,7 +387,7 @@ app.use((req, res) => {
   res.status(404).json({ success: false, error: 'Route not found' });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
   console.log(`📱 Mobile-first Reddit media scraper ready!`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
@@ -411,6 +395,10 @@ app.listen(PORT, () => {
 });
 
 // Handle server errors
+server.on('error', (err) => {
+  console.error('Server error:', err);
+});
+
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
 });
